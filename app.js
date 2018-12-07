@@ -1,9 +1,9 @@
-
+const fs = require('fs-extra') ;
 // Http library
 const http = require('http');
 
 //Step 1. Import crypto-js/sha256
-
+const SHA256 = require('crypto-js/sha256');
 
 // Http port
 const port = 8080;
@@ -15,12 +15,19 @@ let block_2 = {"height":"1","body":"Udacity Blockchain Developer Rock!", "time":
 blocks.push(block_1);
 blocks.push(block_2);
 
+let filename = 'index.html';
+
 //Step 2. Configure web service
+const app = http.createServer(function (request, response){
+    response.writeHead(200, {"Content-Type": "application/json"});
+    response.write(JSON.stringify(SHA256(blocks.block_2).toString()));
+    response.end();
+    });
 /**
  * Take the block_2 data from the array "blocks" and generate the hash to be written into the response.
  */
 //Add your code here
-
+console.log(SHA256(blocks.block_2).toString());
 
 
 // Notify console
