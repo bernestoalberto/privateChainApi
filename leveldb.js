@@ -48,6 +48,21 @@ return new Promise((resolve,reject)=>{
   });
 });
 },
+countBlocks: ()=>{
+  let counter  = 0;
+return new Promise((resolve,reject)=>{
+  db.createReadStream()
+  .on('data', function (data) {
+      counter++;
+  })
+  .on('error', function (err) {
+      reject(err)
+  })
+  .on('close', function () {
+    (counter > 0) ? resolve(counter -1) :resolve(0);
+  });
+});
+},
 // Get data from levelDB with key
  getLevelDBData: (key)=>{
    return new Promise((resolve, reject)=>{
@@ -74,7 +89,7 @@ return new Promise((resolve,reject)=>{
     })
     .on('close', ()=> {
       // console.log(`Block #  ${i}`);
-      persistent.addLevelDBData(block.height, JSON.stringify(block).toString()).then((value)=>{
+      persistent.addLevelDBData(block.height, JSON.stringify(block)).then((value)=>{
        resolve(value);
       }).catch((err)=>{
         reject(error);

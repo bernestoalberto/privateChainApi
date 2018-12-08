@@ -11,18 +11,16 @@ let Block = require ('./block');
 class BlockChain{
     constructor(){
         this.chain=[];
-       this.getBlockHeight().then((value)=>{
-        if(value.length == 0){
-            this.addBlock(new Block("First block in the chain - Genesis block"))
-            .then(()=>{
+       this.getBlockHeight().then((counter)=>{
+        if(counter == 0){
+            this.addBlock(this.createGenesisBlock()).then(()=>{
                 console.log(`The Genesis block was added !!!`);
-            })
-            .catch((error)=>{
+            }).catch((error)=>{
             console.log(error);
             });
     }
         else{
-            console.log(`BlockChain long is ${value.length} block(s)`);
+            console.log(`BlockChain long is ${counter} block(s)`);
         }
        }).catch((error)=>{console.log(error)});
        
@@ -30,9 +28,10 @@ class BlockChain{
  /**
    * @function createGenesisBlock
    *@description Create the Genesis Block of the BlockChain
-   * @returns {void}
+   * @returns {Block}
    */
-    createGenesisBlock(newBlock){
+    createGenesisBlock(){
+        let newBlock = new Block("First block in the chain - Genesis block");
 		newBlock.height = 0;
 		newBlock.previousblockHash = "";
         newBlock.time = new Date().getTime().toString().slice(0,-3);
@@ -46,13 +45,14 @@ class BlockChain{
    * @returns {Integer} The last block index
    */
       getLatestBlock(){
-        this.getBlockHeight().then((value)=>{
-            if(value.length == 0){
-                this.addBlock(new Block("First block in the chain - Genesis block"))
+        level.getAllBlocks().then((value)=>{
+            if(value.length
+                 == 0){
+               this.addBlock(this.createGenesisBlock());
         }         
             if(value.length > 2){
             
-            console.log(`The last block  id: ${value[value.length - 1].key} and #: ${(JSON.parse(value[value.length - 1].value).hash)} `);
+            console.log(`The last block  id: ${value[value.leng - 1].key} and #: ${(JSON.parse(value[value.length - 1].value).hash)} `);
             }
             else{
               console.log(`The last block  id: ${value[1].key} and #: ${(JSON.parse(value[1].value)).hash} `);
@@ -68,7 +68,7 @@ class BlockChain{
    */
     addBlock(newBlock){
         return new Promise((resolve, reject)=>{
-            this.getBlockHeight().then((blockchain)=>{
+            level.getAllBlocks().then((blockchain)=>{
             if(blockchain.length > 0){
                 newBlock = new Block(newBlock);
                 newBlock.previousblockHash = JSON.parse(blockchain[blockchain.length-1].value).hash;
@@ -83,11 +83,13 @@ class BlockChain{
                });
             }  
             else{
-                newBlock = this.createGenesisBlock(newBlock);
-                level.addDataToLevelDB(newBlock).then((value)=>{
+              
+                level.addDataToLevelDB(this.createGenesisBlock()).then((value)=>{
+                    console.log(`Genesis block was added !!!`);
                     resolve(value);
                }).catch((error)=>{
                     reject(error);
+                    process.exit(1)
                });
             }
         })
@@ -115,7 +117,7 @@ class BlockChain{
         }
     }).catch((error)=>{
         console.error(error);
-
+        process.exit(1)
     });
     }
     
@@ -130,13 +132,14 @@ class BlockChain{
 
     getBlockHeight(){
         return new Promise((resolve,reject)=>{
-        level.getAllBlocks(). then((blockchain)=>{
+        level.countBlocks(). then((blockchain)=>{
             // this.printBlockChain(blockchain);
             resolve(blockchain);
         }).
         catch((error)=>{
             console.log(error);
             reject(error);
+            process.exit(1)
         });
         });
     }
@@ -154,19 +157,14 @@ class BlockChain{
         return new Promise((resolve,reject)=>{
      level.getLevelDBData(blockHeight).then((block)=>{
          //validate block validateBlock
-         let blockJson = '';
-          if(blockHeight != 0){
-            blockJson = JSON.parse(block);
-          }
-          else{
-            blockJson= block;
-          };
+            let blockJson = JSON.parse(block);
          console.log(`Hash:${blockJson.hash} => blockHeight: ${blockHeight}`);
          resolve(block);
      })
      .catch((error)=>{
         console.log(error);
         reject(Error(Error(`Block ${blockHeight} not found!!! `)));
+        process.exit(1);
      });
     });
     }
@@ -184,30 +182,29 @@ class BlockChain{
     return new Promise((resolve,reject)=>{
     // get block object
     this.getBlock(blockHeight).then((block)=>{
-   // get block hash
-   let jsobject =JSON.parse(block);
 
    // remove block hash to test block integrity
 
    // generate block hash   
-  let vBlock = new Block(jsobject.body);
-   vBlock.previousblockHash = jsobject.previousblockHash;
-   vBlock.height = jsobject.height;
-   vBlock.time = jsobject.time;
+  let vBlock = new Block(block.body);
+   vBlock.previousblockHash = block.previousblockHash;
+   vBlock.height = block.height;
+   vBlock.time = block.time;
    let validBlockHash = SHA256(JSON.stringify(vBlock)).toString();
    // Compare
-      if (jsobject.hash===validBlockHash) {
+      if (block.hash===validBlockHash) {
        console.log(`Block ${blockHeight} valid`);
        resolve(true);
      }
       else {
-       console.log(`Block # ${blockHeight} invalid hash:\n ${jsobject.hash} <> ${validBlockHash}`);    
-       reject(Error(false));
+       console.log(`Block # ${blockHeight} invalid hash:\n ${block.hash} <> ${validBlockHash}`);    
+       resolve(false);
      }
     })
     .catch((error)=>{
         console.log(error);
         reject(error);
+        process.exit(1);
      });
     });
     
