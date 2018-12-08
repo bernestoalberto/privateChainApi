@@ -1,36 +1,56 @@
-const fs = require('fs-extra') ;
-// Http library
-const http = require('http');
+//Importing Express.js module
+const express = require("express");
+//Importing BodyParser.js module
+const bodyParser = require("body-parser");
 
-//Step 1. Import crypto-js/sha256
-const SHA256 = require('crypto-js/sha256');
-
-// Http port
-const port = 8080;
-
-//Mock Data
-var blocks = [];
-let block_1 = {"height":"0","body":"Udacity Blockchain Developer", "time": 1538509789};
-let block_2 = {"height":"1","body":"Udacity Blockchain Developer Rock!", "time": 1538509789};
-blocks.push(block_1);
-blocks.push(block_2);
-
-let filename = 'index.html';
-
-//Step 2. Configure web service
-const app = http.createServer(function (request, response){
-    response.writeHead(200, {"Content-Type": "application/json"});
-    response.write(JSON.stringify(SHA256(blocks.block_2).toString()));
-    response.end();
-    });
 /**
- * Take the block_2 data from the array "blocks" and generate the hash to be written into the response.
+ * Class Definition for the REST API
  */
-//Add your code here
-console.log(SHA256(blocks.block_2).toString());
+class BlockAPI {
 
+    /**
+     * Constructor that allows initialize the class 
+     */
+    constructor() {
+		this.app = express();
+		this.initExpress();
+		this.initExpressMiddleWare();
+		this.initControllers();
+		this.start();
+	}
 
-// Notify console
-console.log("Web Server started on port 8080\nhttp://localhost:"+port);
-// Start server with http port
-app.listen(port);
+    /**
+     * Initilization of the Express framework
+     */
+	initExpress() {
+		this.app.set("port", 800);
+	}
+
+    /**
+     * Initialization of the middleware modules
+     */
+	initExpressMiddleWare() {
+		this.app.use(bodyParser.urlencoded({extended:true}));
+		this.app.use(bodyParser.json());
+	}
+
+    /**
+     * Initilization of all the controllers
+     */
+	initControllers() {
+		require("./blockController.js")(this.app);
+	}
+
+    /**
+     * Starting the REST Api application
+     */
+	start() {
+		let self = this;
+		this.app.listen(this.app.get("port"), () => {
+			console.log(`Server Listening for port: ${self.app.get("port")}`);
+		});
+	}
+
+}
+
+new BlockAPI();

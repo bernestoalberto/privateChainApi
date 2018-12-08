@@ -12,12 +12,19 @@
     "bitcoinjs-lib": "^4.0.2",
     "bitcoinjs-message": "^2.0.0",
     "body-parser": "^1.18.3",
+    "compression": "^1.7.3",
+    "cookie-session": "^2.0.0-beta.3",
     "crypto-js": "^3.1.9-1",
+    "empty": "^0.10.1",
     "express": "^4.16.4",
     "fs-extra": "^7.0.1",
+    "helmet": "^3.15.0",
     "hex2ascii": "0.0.3",
+    "is-empty": "^1.2.0",
     "level": "^4.0.0",
     "nodemon": "^1.18.7",
-    "npm": "^6.4.1"
+    "npm": "^6.4.1",
+    "pm2": "^3.2.2",
+    "winston": "^3.1.0"
   }
 }
