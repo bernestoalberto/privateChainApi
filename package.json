@@ -1,7 +1,7 @@
 {
-  "name": "client_server",
+  "name": "privatechain",
   "version": "1.0.0",
-  "description": "Client Server exercise with Node.js",
+  "description": "Private Chain Rest Api",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
