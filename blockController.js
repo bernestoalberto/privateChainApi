@@ -1,5 +1,5 @@
 const SHA256 = require('crypto-js/sha256');
-let BlockChain = require('./blockChain.js');
+let BlockChain = require('./blockChain');
 let empty = require('is-empty');
 let cookieSession = require('cookie-session');
 let helmet = require('helmet');
@@ -106,7 +106,7 @@ class BlockController {
             res.setHeader('Conection', 'close');
             res.cookie('eb', 'gb', { domain: '.eabonet.com', path: '/block/:index', secure: true });
             res.cookie('blockchain', '1', { maxAge: 900000, httpOnly: true });
-            this.blockchain.addBlock(req.body.message).then((value)=>{
+            this.blockchain.addBlock(req.body.message || `Testing Rest Api`).then((value)=>{
                 res.send(value);
             }).catch((error)=>{
                 console.log(error);

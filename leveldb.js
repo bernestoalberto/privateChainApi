@@ -28,7 +28,7 @@ deleteBlock:(key)=>{
       reject(err);
       }
       console.log( `Block ${key}  has deleted`);
-      resolve('');
+      resolve(true);
     })
   });
 
@@ -59,7 +59,7 @@ return new Promise((resolve,reject)=>{
       reject(err)
   })
   .on('close', function () {
-    (counter > 0) ? resolve(counter -1) :resolve(0);
+      (counter > 0) ? resolve(counter) :resolve(0);
   });
 });
 },

@@ -23,7 +23,7 @@ class BlockAPI {
      * Initilization of the Express framework
      */
 	initExpress() {
-		this.app.set("port", 800);
+		this.app.set("port", 8000);
 	}
 
     /**
