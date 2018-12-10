@@ -70,7 +70,7 @@ class BlockController {
     /**
      * Implement a GET Endpoint to retrieve a block by index, url: "/api/block/:index"
      */
-    async getBlockByIndex() {
+     getBlockByIndex() {
         this.app.get("/block/:index", (req, res) => {
             // Add your code here
             if (!req.params.index) return res.sendStatus(400);
@@ -80,7 +80,6 @@ class BlockController {
             res.setHeader('Conection', 'close');
             res.cookie('eb', 'gb', { domain: '.eabonet.com', path: '/block/:index', secure: true });
             res.cookie('blockchain', '1', { maxAge: 900000, httpOnly: true });
-            try{
                this.blockchain.getBlockHeight().then((height) => {
                 if(height >= req.params.index){
                     res.end(this.blockchain.getBlock(req.params.index));
@@ -93,14 +92,6 @@ class BlockController {
                   res.send(error);
                    process.exit(1);
                });
-             
-             }
-             catch(error){
-                console.log(error);
-                res.send(error);
-                logger.error(error.toString);
-                process.exit(1);
-             }
        
         });
     }
@@ -118,7 +109,7 @@ class BlockController {
             res.setHeader('Conection', 'close');
             res.cookie('eb', 'gb', { domain: '.eabonet.com', path: '/block/:index', secure: true });
             res.cookie('blockchain', '1', { maxAge: 900000, httpOnly: true });
-            this.blockchain.addBlock(req.body.message || `Testing Rest Api`).then((value)=>{
+            this.blockchain.addBlock(req.body.message).then((value)=>{
                 res.send(value);
             }).catch((error)=>{
                 console.log(error);
