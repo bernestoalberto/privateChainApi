@@ -9,6 +9,7 @@ const level = require('./leveldb');
 let Block = require('./block');
 
 class BlockChain{
+    
     constructor(){
         this.chain=[];
         // let Block = new Block();
@@ -42,7 +43,9 @@ class BlockChain{
       }
  /**
    * @function getLatestBlock
-   *@description Get the last block index
+   *@description 
+   
+   
    * @returns {Integer} The last block index
    */
       getLatestBlock(){

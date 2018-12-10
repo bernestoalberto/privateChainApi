@@ -1,6 +1,6 @@
-2018/12/09-06:37:19.904 3e7c Recovering log #221
-2018/12/09-06:37:19.904 3e7c Level-0 table #223: started
-2018/12/09-06:37:20.270 3e7c Level-0 table #223: 604 bytes OK
-2018/12/09-06:37:20.359 3e7c Delete type=0 #221
-2018/12/09-06:37:20.359 3e7c Delete type=3 #220
-2018/12/09-06:37:20.394 af8 Moved #186 to level-1 373 bytes OK: files[ 3 16 0 0 0 0 0 ]
+2018/12/10-09:54:53.357 3bc4 Recovering log #226
+2018/12/10-09:54:53.357 3bc4 Level-0 table #228: started
+2018/12/10-09:54:53.471 3bc4 Level-0 table #228: 399 bytes OK
+2018/12/10-09:54:53.666 3bc4 Delete type=0 #226
+2018/12/10-09:54:53.666 3bc4 Delete type=3 #225
+2018/12/10-09:54:53.750 3f30 Moved #189 to level-1 373 bytes OK: files[ 3 17 0 0 0 0 0 ]

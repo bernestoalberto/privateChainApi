@@ -1,8 +1,73 @@
 # RESTful Web API with Node.js Framework
 An API for your private blockchain you expose functionality that can be consumed by several types of web clients ranging from desktop, mobile, and IoT devices
+## About Restful Web  API
+
+The project's structure is display it on the image down below
+![Project Structure](https://github.com/bernestoalberto/private/tree/master/structure.png)
+
+A RESTful API using a Node.js framework that will interfaces with the private blockchain,to persist a blockchain dataset. The project has tow major functionalities
+<a src='http://localhost:8000/block/1'>GET block</a>
+Error Handling: 
+The function throw an error when the height entered in the URL is out of bounds. Prints : <br>
+Request :
+http://localhost:8000/50 <br>
+
+BlockChain Height : 20 blocks <br>
+
+Response: <br>
+``
+`Index block 50 out of bounds `
+``
+
+<a src='http://localhost:8000/block'>POST block</a>
+
+Request: <br>
+``
+http://localhost:8000/block
+``
+``
+body : {}
+``
+<br>
+Response:
+``
+There was an issue with your request. Try again later
+``
+## Aditional Functionalities
+There are additional functions to suppport the API purpose  like: <br>
+Counts all the Blocks in your chain and give you as a result the last height in your chain <br>
+``
+ getBlockHeight() 
+ ``
+ <br>
+  Gets a block and returns it as JSON string object
+ <br>
+ ``
+ getBlock() 
+ ``
+ <br>
+The last block index<br>
+ ``
+ getLatestBlock() 
+ ``
+ <br>
+ Validates block data integrity <br>
+ ``
+ validateBlock()  
+ ``
+ <br>
+ Validates all blocks data integrity <br>
+ ``
+ validateAllBlocks() 
+ ``
+ <br>
+  Validates blockChain data integrity <br>
+ ``validateChain() 
+``<br>
+
 
 ## Node.js framework
-Express.js
+[Express.js](https://expressjs.com/).
 ## Endpoint documentation
 GET Block Endpoint <br>
 Request

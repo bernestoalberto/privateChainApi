@@ -70,7 +70,7 @@ class BlockController {
     /**
      * Implement a GET Endpoint to retrieve a block by index, url: "/api/block/:index"
      */
-    getBlockByIndex() {
+    async getBlockByIndex() {
         this.app.get("/block/:index", (req, res) => {
             // Add your code here
             if (!req.params.index) return res.sendStatus(400);
@@ -80,16 +80,28 @@ class BlockController {
             res.setHeader('Conection', 'close');
             res.cookie('eb', 'gb', { domain: '.eabonet.com', path: '/block/:index', secure: true });
             res.cookie('blockchain', '1', { maxAge: 900000, httpOnly: true });
-             this.blockchain.getBlock(req.params.index).then((block)=>{
-                res.end(block);
-             }).
-             catch((error)=>{
-              console.log(error);
-              res(error);
-              logger.error(error.toString);
-              process.exit(1);
-             });
-   
+            try{
+               this.blockchain.getBlockHeight().then((height) => {
+                if(height >= req.params.index){
+                    res.end(this.blockchain.getBlock(req.params.index));
+               }
+               else{
+                  res.send(`Index block  ${req.params.index} out of bounds`);
+                } 
+               }).catch((error)=>{
+                   console.log(error);
+                  res.send(error);
+                   process.exit(1);
+               });
+             
+             }
+             catch(error){
+                console.log(error);
+                res.send(error);
+                logger.error(error.toString);
+                process.exit(1);
+             }
+       
         });
     }
 
@@ -99,7 +111,7 @@ class BlockController {
    
      postNewBlock() {
         this.app.post("/block", (req, res)=>{
-            if (empty(req.body)) return res.sendStatus(400).end();
+            if (empty(req.body.message)) return res.sendStatus(400).end();
             res.setHeader('Content-Type', 'application/json; charset=utf-8');
             res.setHeader('cache-control', 'no-cache');
             res.setHeader('Content-Length', '238');
